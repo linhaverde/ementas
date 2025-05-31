@@ -1,4 +1,4 @@
-import { Ementa } from "./types";
+import { Ementa, HighlightOptions } from "./types";
 
 /**
  * Processa o conteúdo do arquivo de ementas e extrai as informações estruturadas
@@ -38,13 +38,27 @@ export function parseEmentas(content: string): Ementa[] {
     const dataPublicacaoMatch = bloco.match(/\*\*Data de Publicação da Súmula:\*\*\s*([^\n]*)/i);
     const dataPublicacao = dataPublicacaoMatch ? dataPublicacaoMatch[1].trim() : null;
     
+    // Extrai o nome do desembargador/relator (opcional)
+    // Verifica primeiro o padrão "Relator(a):" e depois "Desembargador:"
+    let desembargador = null;
+    const relatorMatch = bloco.match(/\*\*Relator\(a\):\*\*\s*([^\n]*)/i);
+    if (relatorMatch) {
+      desembargador = relatorMatch[1].trim();
+    } else {
+      const desembargadorMatch = bloco.match(/\*\*Desembargador:\*\*\s*([^\n]*)/i);
+      if (desembargadorMatch) {
+        desembargador = desembargadorMatch[1].trim();
+      }
+    }
+    
     // Só adiciona se tiver texto de ementa
     if (ementaTexto) {
       ementas.push({
         numeroProcesso,
         ementaTexto,
         dataJulgamento,
-        dataPublicacao
+        dataPublicacao,
+        desembargador
       });
     }
   }
@@ -79,6 +93,72 @@ export function buscarEmentas(ementas: Ementa[], termos: string[]): Ementa[] {
     // Verifica se TODOS os termos estão presentes no texto da ementa
     return termosLower.every(termo => ementaTextLower.includes(termo));
   });
+}
+
+/**
+ * Destaca os termos de busca no texto
+ * 
+ * @param text Texto original
+ * @param options Opções de destaque (termos e classe CSS)
+ * @returns Texto com os termos destacados usando spans HTML
+ */
+export function highlightTerms(text: string, options: HighlightOptions): string {
+  if (!options.terms.length) return text;
+  
+  let result = text;
+  
+  // Cria uma expressão regular que busca todos os termos
+  // Usa captura para preservar o case original
+  const termPattern = options.terms
+    .map(term => term.trim())
+    .filter(term => term.length > 0)
+    .map(term => escapeRegExp(term))
+    .join('|');
+  
+  if (!termPattern) return text;
+  
+  const regex = new RegExp(`(${termPattern})`, 'gi');
+  
+  // Substitui todas as ocorrências com spans destacados
+  result = result.replace(regex, `<span class="${options.highlightClass}">$1</span>`);
+  
+  return result;
+}
+
+/**
+ * Escapa caracteres especiais para uso em expressão regular
+ */
+function escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Abre o site do TJMG com o número do processo preenchido
+ * 
+ * @param numeroProcesso Número do processo a ser preenchido
+ */
+export function openTJMGSite(numeroProcesso: string): void {
+  // Remove caracteres não numéricos para garantir compatibilidade
+  const processoCleaned = numeroProcesso.replace(/\D/g, '');
+  
+  // Abre o site em uma nova aba
+  window.open(`https://www5.tjmg.jus.br/jurisprudencia/formEspelhoAcordao.do?numeroRegistro=${processoCleaned}`, '_blank');
+}
+
+/**
+ * Copia o texto para a área de transferência
+ * 
+ * @param text Texto a ser copiado
+ * @returns Promise que resolve para true se copiado com sucesso
+ */
+export async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (err) {
+    console.error('Falha ao copiar texto:', err);
+    return false;
+  }
 }
 
 /**

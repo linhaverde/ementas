@@ -1,0 +1,222 @@
+/* Estilos globais */
+:root {
+  --primary-color: #1a4b8c;
+  --primary-light: #2a6cb8;
+  --primary-dark: #0d2c54;
+  --secondary-color: #e6f0ff;
+  --accent-color: #3498db;
+  --text-color: #333;
+  --text-light: #666;
+  --background-color: #f8f9fa;
+  --card-background: #ffffff;
+  --highlight-color: #b3d4fc;
+  --error-color: #e74c3c;
+  --success-color: #2ecc71;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* Container principal */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Cabeçalho */
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.app-header h1 {
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.status-text {
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+/* Formulário de busca */
+.search-container {
+  margin-bottom: 2rem;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .search-form {
+    flex-direction: row;
+  }
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.search-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-button:hover {
+  background-color: var(--primary-light);
+}
+
+.search-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Mensagem de cópia */
+.copy-message {
+  background-color: var(--success-color);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mensagem de erro */
+.error-message {
+  background-color: var(--error-color);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+}
+
+/* Resultados da busca */
+.results-container {
+  margin-top: 2rem;
+}
+
+.results-title {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Card de ementa */
+.ementa-card {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ementa-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.processo-title {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--primary-dark);
+  font-size: 1.25rem;
+}
+
+.processo-button {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: color 0.2s;
+  text-decoration: underline;
+}
+
+.processo-button:hover {
+  color: var(--accent-color);
+}
+
+.desembargador-info {
+  font-weight: 500;
+  color: var(--primary-dark);
+  margin-bottom: 0.5rem;
+}
+
+.date-info {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.ementa-text {
+  margin-top: 1rem;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+/* Destaque para termos pesquisados */
+.highlight-term {
+  background-color: var(--highlight-color);
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+/* Mensagem de nenhum resultado */
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  color: var(--text-light);
+}
